@@ -3,8 +3,6 @@ import { createSelector } from '@ngrx/store';
 import * as fromFeature from '../reducers';
 import * as fromMatches from '../reducers/matches.reducer';
 
-import { Match } from '../../models/match.model';
-
 export const getMatchesState = createSelector(
     fromFeature.getBettingState,
     (state: fromFeature.BettingState) => state.matches

@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
 
 import { Store, Action, MemoizedSelector } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { tap, filter, take, switchMap, catchError } from 'rxjs/operators';
-
-import * as fromStore from '../store';
+import { tap, filter, take } from 'rxjs/operators';
 
 @Injectable()
 export class GuardHelpers {

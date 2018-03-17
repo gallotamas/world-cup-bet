@@ -10,14 +10,14 @@ import * as fromStore from '../store';
 import { GuardHelpers } from './guardHelpers';
 
 @Injectable()
-export class TeamsGuard implements CanActivate {
+export class StagesGuard implements CanActivate {
   constructor(
     private store: Store<fromStore.BettingState>,
     private guardHelpers: GuardHelpers,
   ) {}
 
   canActivate(): Observable<boolean> {
-    return this.guardHelpers.checkIfLoaded(this.store, fromStore.getTeamsLoaded, fromStore.LoadTeams)
+    return this.guardHelpers.checkIfLoaded(this.store, fromStore.getStagesLoaded, fromStore.LoadStages)
       .pipe(
         switchMap(() => of(true)),
         catchError(() => of(false))
