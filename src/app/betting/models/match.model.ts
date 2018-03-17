@@ -3,4 +3,5 @@ export interface Match {
     homeTeamId: string;
     awayTeamId: string;
     stageId: string;
+    startTime: number;
 }

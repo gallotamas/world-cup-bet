@@ -9,4 +9,5 @@ export interface MatchExtended {
     awayTeam: Team;
     stageId: string;
     stage: Stage;
+    startTime: number;
 }

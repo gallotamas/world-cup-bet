@@ -12,7 +12,8 @@ import { Match, Team, MatchExtended, Stage } from '../../models';
   template: `
     <div
       *ngFor="let match of (matchesExtended$ | async)">
-      <span>{{ match.stage.name }}: </span>
+      <span>{{ match.stage.name }}</span>
+      <span>| {{ match.startTime | date:'medium' }} |</span>
       {{ match.homeTeam.name }} - {{ match.awayTeam.name }}
     </div>
   `,
