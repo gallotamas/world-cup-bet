@@ -20,7 +20,7 @@ import * as fromServices from './services';
 export const ROUTES: Routes = [
   {
     path: '',
-    canActivate: [fromGuards.MatchesGuard],
+    canActivate: [fromGuards.MatchesGuard, fromGuards.TeamsGuard],
     component: fromContainers.BettingComponent,
   },
 ];

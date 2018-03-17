@@ -1,6 +1,6 @@
 export interface Match {
     id: number;
-    home: string;
-    away: string;
-    stage: string;
+    homeTeamId: string;
+    awayTeamId: string;
+    stageId: string;
 }
