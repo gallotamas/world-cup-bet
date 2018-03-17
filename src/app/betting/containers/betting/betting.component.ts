@@ -22,7 +22,6 @@ export class BettingComponent implements OnInit {
   constructor(private store: Store<fromStore.BettingState>) { }
 
   ngOnInit() {
-    this.store.dispatch(new fromStore.LoadMatches());
     this.matches$ = this.store.select(fromStore.getAllMatches);
   }
 }

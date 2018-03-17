@@ -10,6 +10,9 @@ import { reducers, effects } from './store';
 // containers
 import * as fromContainers from './containers';
 
+// guards
+import * as fromGuards from './guards';
+
 // services
 import * as fromServices from './services';
 
@@ -17,6 +20,7 @@ import * as fromServices from './services';
 export const ROUTES: Routes = [
   {
     path: '',
+    canActivate: [fromGuards.MatchesGuard],
     component: fromContainers.BettingComponent,
   },
 ];
@@ -28,7 +32,7 @@ export const ROUTES: Routes = [
     StoreModule.forFeature('betting', reducers),
     EffectsModule.forFeature(effects),
   ],
-  providers: [...fromServices.services],
+  providers: [...fromServices.services, ...fromGuards.guards],
   declarations: [...fromContainers.containers],
   exports: [...fromContainers.containers],
 })
