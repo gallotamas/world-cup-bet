@@ -6,13 +6,18 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreModule, MetaReducer } from '@ngrx/store';
 import { RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router-store';
 
 import { RootComponent } from './core/root/root.component';
-import { reducers, effects, CustomSerializer } from './core/store';
+import { reducers, effects, CustomSerializer, State } from './core/store';
 import { environment } from '../environments/environment';
+
+// not used in production
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { storeFreeze } from 'ngrx-store-freeze';
+
+export const metaReducers: MetaReducer<State>[] = !environment.production ? [storeFreeze] : [];
 
 // routes
 export const ROUTES: Routes = [
@@ -29,7 +34,7 @@ export const ROUTES: Routes = [
     RouterModule.forRoot(ROUTES),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireDatabaseModule,
-    StoreModule.forRoot(reducers),
+    StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     EffectsModule.forRoot(effects),
     StoreRouterConnectingModule
