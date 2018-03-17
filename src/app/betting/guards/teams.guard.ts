@@ -7,27 +7,20 @@ import { of } from 'rxjs/observable/of';
 import { tap, filter, take, switchMap, catchError } from 'rxjs/operators';
 
 import * as fromStore from '../store';
+import { GuardHelpers } from './guardHelpers';
 
 @Injectable()
 export class TeamsGuard implements CanActivate {
-  constructor(private store: Store<fromStore.BettingState>) {}
+  constructor(
+    private store: Store<fromStore.BettingState>,
+    private guardHelpers: GuardHelpers,
+  ) {}
 
   canActivate(): Observable<boolean> {
-    return this.checkStore().pipe(
-      switchMap(() => of(true)),
-      catchError(() => of(false))
-    );
-  }
-
-  checkStore(): Observable<boolean> {
-    return this.store.select(fromStore.getTeamsLoaded).pipe(
-      tap(loaded => {
-        if (!loaded) {
-          this.store.dispatch(new fromStore.LoadTeams());
-        }
-      }),
-      filter(loaded => loaded),
-      take(1)
-    );
+    return this.guardHelpers.checkIfLoaded(this.store, fromStore.getTeamsLoaded, fromStore.LoadTeams)
+      .pipe(
+        switchMap(() => of(true)),
+        catchError(() => of(false))
+      );
   }
 }
