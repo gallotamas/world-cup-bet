@@ -20,5 +20,5 @@ import { Component } from '@angular/core';
   `
 })
 export class RootComponent {
-  title = 'app';
+  constructor() { }
 }

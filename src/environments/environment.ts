@@ -7,7 +7,7 @@ export const environment = {
   production: false,
   firebaseConfig: {
     apiKey: 'AIzaSyAhE0gX3OhzB0tsyIH2THR6LzhMGatWERs',
-    // authDomain: '<your-project-authdomain>',
+    authDomain: 'bet-world-cup.firebaseapp.com',
     databaseURL: 'https://bet-world-cup.firebaseio.com/',
     projectId: 'bet-world-cup',
     // storageBucket: '<your-storage-bucket>',
