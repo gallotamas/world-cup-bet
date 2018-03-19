@@ -6,7 +6,7 @@ import * as fromAuth from './auth.reducer';
 export import CustomSerializer = fromRouter.CustomSerializer;
 
 export interface CoreState {
-  router: fromRouter.RouterState;
+  router: fromRouter.RouterState<fromRouter.RouterStateUrl>;
   auth: fromAuth.AuthState;
 }
 

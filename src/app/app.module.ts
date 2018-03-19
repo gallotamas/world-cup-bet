@@ -31,10 +31,12 @@ import * as fromServices from './core/services';
 // routes
 export const ROUTES: Routes = [
   { path: 'login', component: fromContainers.LoginComponent },
-  { path: '', canActivate: [fromGuards.AuthGuard], children: [
-    { path: '', pathMatch: 'full', redirectTo: 'betting' },
-    { path: 'betting', loadChildren: './betting/betting.module#BettingModule' }
-  ]}
+  {
+    path: '', canActivate: [fromGuards.AuthGuard], children: [
+      { path: '', pathMatch: 'full', redirectTo: 'betting' },
+      { path: 'betting', loadChildren: './betting/betting.module#BettingModule' }
+    ]
+  }
 ];
 
 @NgModule({

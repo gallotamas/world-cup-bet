@@ -21,7 +21,6 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.store.select(fromStore.getUser);
-    this.store.dispatch(new fromStore.ObserveAuthState());
   }
 
   login() {

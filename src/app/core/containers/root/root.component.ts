@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import { Store } from '@ngrx/store';
+
+import * as fromStore from '../../store';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +23,11 @@ import { Component } from '@angular/core';
   </div>
   `
 })
-export class RootComponent {
-  constructor() { }
+export class RootComponent implements OnInit {
+  constructor(private store: Store<fromStore.CoreState>) { }
+
+  ngOnInit() {
+    // start observing authentication state
+    this.store.dispatch(new fromStore.ObserveAuthState());
+  }
 }

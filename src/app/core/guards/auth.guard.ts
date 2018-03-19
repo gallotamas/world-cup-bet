@@ -4,7 +4,7 @@ import { CanActivate } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
-import { tap, filter, take, switchMap, catchError } from 'rxjs/operators';
+import { skipWhile, switchMap } from 'rxjs/operators';
 
 import * as fromStore from '../store';
 
@@ -15,12 +15,19 @@ export class AuthGuard implements CanActivate {
   ) { }
 
   canActivate(): Observable<boolean> {
-    return this.store.select(fromStore.getAuthCompleted).pipe(
-      tap(completed => {
-        if (!completed) {
-          this.store.dispatch(new fromStore.Go({ path: ['login'] }));
-        }
-      })
+    return this.store.select(fromStore.getAuthState).pipe(
+      skipWhile(authState => authState.inProgress),
+      switchMap(authState =>
+        this.store.select(fromStore.getRouterState).switchMap(router => {
+          if (authState.user === null) {
+            this.store.dispatch(new fromStore.Go({
+              path: ['login'],
+              query: { redirectUri: router.url }
+            }));
+          }
+          return of(!!authState.user);
+        })
+      )
     );
   }
 }

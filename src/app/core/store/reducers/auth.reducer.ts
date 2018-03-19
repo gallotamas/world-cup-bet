@@ -19,7 +19,8 @@ export function reducer(state = initialState, action: fromAuth.AuthAction): Auth
       return { ...state, inProgress: true };
     }
 
-    case fromAuth.AUTH_STATE_UPDATE: {
+    case fromAuth.AUTH_STATE_UPDATE:
+    case fromAuth.SIGN_IN_SUCCESS: {
       const user = action.payload;
       return { ...state, inProgress: false, completed: true, user };
     }
@@ -27,6 +28,10 @@ export function reducer(state = initialState, action: fromAuth.AuthAction): Auth
     case fromAuth.SIGN_IN:
     case fromAuth.SIGN_OUT: {
       return { ...state, inProgress: true, completed: false };
+    }
+
+    case fromAuth.SIGN_OUT_SUCCESS: {
+      return { ...state, inProgress: false, completed: true, user: null };
     }
 
     case fromAuth.SIGN_IN_FAIL:

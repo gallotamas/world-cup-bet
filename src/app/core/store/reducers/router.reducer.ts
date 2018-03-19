@@ -28,4 +28,4 @@ export class CustomSerializer implements fromRouter.RouterStateSerializer<Router
   }
 }
 
-export const getRouterState = (routerState: RouterState) => routerState.state;
+export const getRouterState = (routerState: RouterState<RouterStateUrl>) => routerState.state;

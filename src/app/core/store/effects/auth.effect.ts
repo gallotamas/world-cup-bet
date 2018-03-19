@@ -1,18 +1,23 @@
 import { Injectable } from '@angular/core';
 
+import { Store } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
 import { of } from 'rxjs/observable/of';
-import { tap, map, switchMap, catchError } from 'rxjs/operators';
+import { map, take, switchMap, catchError } from 'rxjs/operators';
 
 import * as authActions from '../actions/auth.action';
+import * as routerActions from '../actions/router.action';
 import * as fromServices from '../../services';
+import { CoreState } from '../reducers';
+import { getRouterState } from '../selectors';
 import { User } from '../../models/user.model';
 
 @Injectable()
 export class AuthEffects {
   constructor(
     private actions$: Actions,
-    private authService: fromServices.AuthService
+    private authService: fromServices.AuthService,
+    private store: Store<CoreState>
   ) { }
 
   @Effect()
@@ -32,10 +37,24 @@ export class AuthEffects {
       return this.authService
         .signIn()
         .pipe(
-          map(() => new authActions.Noop()),
-          // only catch the errors and don't handle state change here because if the sign in was successful
-          // then the auth state will be updated in the observeAuthState$ effect.
+          map((userCredential) => new authActions.SignInSuccess(new User(userCredential.user))),
           catchError(error => of(new authActions.SignInFail(error)))
+        );
+    })
+  );
+
+  @Effect()
+  signInSuccess$ = this.actions$.ofType(authActions.SIGN_IN_SUCCESS).pipe(
+    switchMap(() => {
+      return this.store.select(getRouterState)
+        .pipe(
+          // only take one state from the router because we are about to navigate away
+          // that would cause an infinite loop if we subscribe for more.
+          take(1),
+          map(router => {
+            const redirectUri = router.queryParams.redirectUri || 'betting';
+            return new routerActions.Go({ path: [redirectUri] });
+          })
         );
     })
   );
@@ -46,9 +65,7 @@ export class AuthEffects {
       return this.authService
         .signOut()
         .pipe(
-          map(() => new authActions.Noop()),
-          // only catch the errors and don't handle state change here because if the sign out was successful
-          // then the auth state will be updated in the observeAuthState$ effect.
+          map(() => new authActions.SignOutSuccess()),
           catchError(error => of(new authActions.SignInFail(error)))
         );
     })
