@@ -16,6 +16,7 @@ import { Match, Team, MatchExtended, Stage, Bet } from '../../models';
       <span>| {{ match.startTime | date:'medium' }}</span>
       <span>| {{ match.homeTeam.name }} - {{ match.awayTeam.name }}</span>
       <span *ngIf="match.bet">| my bet: {{ match.bet.homeScore }} : {{ match.bet.awayScore }}</span>
+      <button (click)="updateBet(match.id)">Update bet</button>
     </div>
   `,
   styleUrls: ['./betting.component.scss'],
@@ -41,5 +42,9 @@ export class BettingComponent implements OnInit {
           };
         });
       });
+  }
+
+  updateBet(matchId: number) {
+    this.store.dispatch(new fromStore.UpdateBet(matchId, { homeScore: 2, awayScore: 1 }));
   }
 }
