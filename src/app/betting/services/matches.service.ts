@@ -12,7 +12,7 @@ export class MatchesService {
   constructor(private db: AngularFireDatabase) {}
 
   getMatches(): Observable<Match[]> {
-    return this.db.list<Match>('matches').valueChanges()
+    return this.db.object<Match>('matches').valueChanges()
         .pipe(catchError((error: any) => Observable.throw(error.json())));
   }
 }

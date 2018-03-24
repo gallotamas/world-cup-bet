@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 
 import * as fromStore from '../../store';
-import { Match, Team, MatchExtended, Stage } from '../../models';
+import { Match, Team, MatchExtended, Stage, Bet } from '../../models';
 
 @Component({
   selector: 'app-betting',
@@ -13,8 +13,9 @@ import { Match, Team, MatchExtended, Stage } from '../../models';
     <div
       *ngFor="let match of (matchesExtended$ | async)">
       <span>{{ match.stage.name }}</span>
-      <span>| {{ match.startTime | date:'medium' }} |</span>
-      {{ match.homeTeam.name }} - {{ match.awayTeam.name }}
+      <span>| {{ match.startTime | date:'medium' }}</span>
+      <span>| {{ match.homeTeam.name }} - {{ match.awayTeam.name }}</span>
+      <span *ngIf="match.bet">| my bet: {{ match.bet.homeScore }} : {{ match.bet.awayScore }}</span>
     </div>
   `,
   styleUrls: ['./betting.component.scss'],
@@ -30,16 +31,13 @@ export class BettingComponent implements OnInit {
       this.store.select(fromStore.getAllMatches),
       this.store.select(fromStore.getTeamsEntities),
       this.store.select(fromStore.getStagesEntities),
+      this.store.select(fromStore.getMyBetsEntities),
     ])
-      .map((data) => {
-        const matches: Match[] = data[0];
-        const teams: { [id: string]: Team } = data[1];
-        const stages: { [id: string]: Stage } = data[2];
-
+      .map(([matches, teams, stages, myBets]: [Match[], { [id: string]: Team }, { [id: string]: Stage }, { [matchId: string]: Bet }]) => {
         return matches.map(match => {
           return {
             ...match,
-            ...{ homeTeam: teams[match.homeTeamId], awayTeam: teams[match.awayTeamId], stage: stages[match.stageId] }
+            ...{ homeTeam: teams[match.homeTeamId], awayTeam: teams[match.awayTeamId], stage: stages[match.stageId], bet: myBets[match.id] }
           };
         });
       });

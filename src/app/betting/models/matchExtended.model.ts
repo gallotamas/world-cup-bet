@@ -1,5 +1,6 @@
 import { Team } from './team.model';
 import { Stage } from './stage.model';
+import { Bet } from './bet.model';
 
 export interface MatchExtended {
     id: number;
@@ -9,5 +10,6 @@ export interface MatchExtended {
     awayTeam: Team;
     stageId: string;
     stage: Stage;
+    bet: Bet;
     startTime: number;
 }
