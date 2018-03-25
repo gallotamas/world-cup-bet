@@ -17,3 +17,15 @@ export class User {
     this.uid = firebaseUser.uid;
   }
 }
+
+export class PublicUserData {
+  displayName: string | null;
+  photoURL: string | null;
+  uid: string;
+
+  constructor(user: User) {
+    this.displayName = user.displayName;
+    this.photoURL = user.photoURL;
+    this.uid = user.uid;
+  }
+}

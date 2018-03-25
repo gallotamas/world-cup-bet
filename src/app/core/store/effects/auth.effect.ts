@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
 import { of } from 'rxjs/observable/of';
-import { map, take, switchMap, catchError } from 'rxjs/operators';
+import { tap, map, take, switchMap, catchError } from 'rxjs/operators';
 
 import * as authActions from '../actions/auth.action';
 import * as routerActions from '../actions/router.action';
@@ -45,6 +45,10 @@ export class AuthEffects {
 
   @Effect()
   signInSuccess$ = this.actions$.ofType(authActions.SIGN_IN_SUCCESS).pipe(
+    tap((action: authActions.SignInSuccess) => {
+      this.authService.updateUserData(action.payload)
+        .pipe(take(1)).subscribe(() => { });
+    }),
     switchMap(() => {
       return this.store.select(getRouterState)
         .pipe(
